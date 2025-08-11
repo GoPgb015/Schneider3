@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Schneider Electric · Carbon Emission Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand brand-center">
+      <div class="dot"></div>
+      <h1>Schneider Electric — Carbon Emission Calculator</h1>
+      <div class="dot"></div>
+    </div>
+    <p class="tagline">Scope 1 / Scope 2 / Scope 3 — organized and fast</p>
+  </header>
+
+  <main class="container">
+
+    <!-- Scope 1 -->
+    <section class="scope-section scope1">
+      <header class="scope-header">
+        <h2>Scope 1 — Direct Emissions</h2>
+        <button type="button" class="btn btn-primary add-row" data-scope="Scope 1">+ Add Row</button>
+      </header>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Year</th>
+              <th>Industry Type</th>
+              <th>Activity</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Factor</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows-scope1"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Scope 2 -->
+    <section class="scope-section scope2">
+      <header class="scope-header">
+        <h2>Scope 2 — Energy Indirect</h2>
+        <button type="button" class="btn btn-primary add-row" data-scope="Scope 2">+ Add Row</button>
+      </header>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Year</th>
+              <th>Industry Type</th>
+              <th>Activity</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Factor</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows-scope2"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Scope 3 (Drill-down) -->
+    <section class="scope-section scope3">
+      <header class="scope-header">
+        <h2>Scope 3 — Other Indirect (Drill-down)</h2>
+        <button type="button" class="btn btn-primary add-row" data-scope="Scope 3">+ Add Row</button>
+      </header>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Year</th>
+              <th>Industry Type</th>
+              <th>Flow Direction</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Group</th>
+              <th>Subtype</th>
+              <th>Unit</th>
+              <th>Factor</th>
+              <th>Quantity</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rows-scope3"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="toolbar">
+      <button id="calculate" type="button" class="btn btn-primary">Calculate Emissions</button>
+      <button id="clear-all" type="button" class="btn btn-outline">Clear All</button>
+    </div>
+
+    <!-- KPIs -->
+    <section class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Emissions</div>
+        <div class="stat-value"><span id="total">0.00</span><small>kgCO₂e</small></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Scope 1</div>
+        <div class="stat-value"><span id="scope1">0.00</span><small>kgCO₂e</small></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Scope 2</div>
+        <div class="stat-value"><span id="scope2">0.00</span><small>kgCO₂e</small></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Scope 3</div>
+        <div class="stat-value"><span id="scope3">0.00</span><small>kgCO₂e</small></div>
+      </div>
+    </section>
+
+    <!-- Visuals -->
+    <section class="viz-section">
+      <h3>Visual Analytics</h3>
+      <div class="viz-grid">
+        <div class="viz-card"><h4>Scope Mix</h4><div id="chart-scope-mix"></div></div>
+        <div class="viz-card"><h4>Emissions by Scope</h4><div id="chart-scope-bars"></div></div>
+        <div class="viz-card wide"><h4>Scope 3 by Category</h4><div id="chart-s3-category"></div></div>
+        <div class="viz-card"><h4>Top Scope 3 Subtypes</h4><div id="chart-s3-top"></div></div>
+        <div class="viz-card"><h4>Emissions by Year</h4><div id="chart-year"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>Excel-backed · Flask · Plotly</span>
+  </footer>
+
+  <!-- Server data -->
+  <script>
+    const scopes     = {{ scopes|tojson|safe }};
+    const activities = {{ activities|tojson|safe }};
+    const factors12  = {{ factors12|tojson|safe }};
+    const countries  = {{ countries|tojson|safe }};
+    const scope3     = {{ scope3|tojson|safe }};
+  </script>
+
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
